@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include "errno/errno.h"
 #include "digest/digest.h"
 #include "http/http.h"

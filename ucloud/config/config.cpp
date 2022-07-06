@@ -3,6 +3,7 @@
 #include "utils/json_util.h"
 #include <string.h>
 #include <fstream>
+#include <unistd.h>
 
 using namespace ucloud::cppsdk::error;
 using namespace ucloud::cppsdk::utils;

@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include "errno/errno.h"
 #include "utils/network_util.h"
 #include "utils/string_util.h"

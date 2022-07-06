@@ -116,7 +116,7 @@ int download_as_file(int argc, char **argv) {
     ssize_t begin = -1, end = -1;
     if (argc == 4) {
         sscanf(argv[3], "%zd-%zd", &begin, &end);
-        range = std::make_pair<ssize_t, ssize_t>(begin, end);
+        range = std::make_pair(begin, end);
         ret = downloader.DownloadAsFile(argv[0], argv[1], argv[2], &range);
     } else {
         ret = downloader.DownloadAsFile(argv[0], argv[1], argv[2]);
@@ -151,7 +151,7 @@ int download_as_stream(int argc, char **argv) {
     ssize_t begin = -1, end = -1;
     if (argc == 4) {
         sscanf(argv[3], "%zd-%zd", &begin, &end);
-        range = std::make_pair<ssize_t, ssize_t>(begin, end);
+        range = std::make_pair(begin, end);
         ret = downloader.Download(argv[0], argv[1], &ofs, &range);
     } else {
         ret = downloader.Download(argv[0], argv[1], &ofs);
