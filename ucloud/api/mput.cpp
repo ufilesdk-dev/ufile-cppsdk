@@ -1,17 +1,17 @@
-#include "api/mput.h"
-#include "api/common.h"
+#include <ufile-cppsdk/mput.h>
+#include <ufile-cppsdk/common.h>
 #include <json-c/json.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include "errno/errno.h"
-#include "digest/digest.h"
-#include "http/http.h"
-#include "utils/urlcodec.h"
-#include "utils/json_util.h"
-#include "utils/stream_util.h"
+#include <ufile-cppsdk/errno.h>
+#include <ufile-cppsdk/digest.h>
+#include <ufile-cppsdk/http.h>
+#include <ufile-cppsdk/urlcodec.h>
+#include <ufile-cppsdk/json_util.h>
+#include <ufile-cppsdk/stream_util.h>
 
 using namespace ucloud::cppsdk::error;
 using namespace ucloud::cppsdk::digest;

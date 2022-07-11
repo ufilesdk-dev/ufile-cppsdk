@@ -1,9 +1,9 @@
-#include "api/common.h"
+#include <ufile-cppsdk/common.h>
 #include <json-c/json.h>
 #include <string>
-#include "utils/json_util.h"
-#include "errno/errno.h"
-#include "http/mimetype.h"
+#include <ufile-cppsdk/json_util.h>
+#include <ufile-cppsdk/errno.h>
+#include <ufile-cppsdk/mimetype.h>
 
 using namespace ucloud::cppsdk::utils;
 using namespace ucloud::cppsdk::error;

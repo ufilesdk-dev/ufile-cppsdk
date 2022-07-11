@@ -25,7 +25,7 @@
  *
  *                                                             */
 
-#include "base64.h"
+#include <ufile-cppsdk/base64.h>
 #include <iostream>
 
 namespace ucloud {

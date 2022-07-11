@@ -1,15 +1,15 @@
-#include "api/download.h"
-#include "api/common.h"
+#include <ufile-cppsdk/download.h>
+#include <ufile-cppsdk/common.h>
 #include <string.h>
 #include <unistd.h>
 #include <sstream>
 #include <fstream>
-#include "errno/errno.h"
-#include "http/http.h"
-#include "utils/urlcodec.h"
-#include "utils/stream_util.h"
-#include "digest/digest.h"
-#include "config/config.h"
+#include <ufile-cppsdk/errno.h>
+#include <ufile-cppsdk/http.h>
+#include <ufile-cppsdk/urlcodec.h>
+#include <ufile-cppsdk/stream_util.h>
+#include <ufile-cppsdk/digest.h>
+#include <ufile-cppsdk/config.h>
 
 using namespace ucloud::cppsdk::http;
 using namespace ucloud::cppsdk::error;

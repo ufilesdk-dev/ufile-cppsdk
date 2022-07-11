@@ -1,15 +1,15 @@
 //first level including
-#include "digest/digest.h"
+#include <ufile-cppsdk/digest.h>
 //C/C++ including
 #include <string.h>
 #include <algorithm>
 //other local project including
-#include "config/config.h"
-#include "errno/errno.h"
-#include "base64/base64.h"
-#include "hmac/hmac_sha1.h"
-#include "http/http.h"
-#include "utils/string_util.h"
+#include <ufile-cppsdk/config.h>
+#include <ufile-cppsdk/errno.h>
+#include <ufile-cppsdk/base64.h>
+#include <ufile-cppsdk/hmac_sha1.h>
+#include <ufile-cppsdk/http.h>
+#include <ufile-cppsdk/string_util.h>
 
 using namespace ucloud::cppsdk::error;
 using namespace ucloud::cppsdk::base64;

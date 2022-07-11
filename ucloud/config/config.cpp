@@ -1,6 +1,6 @@
-#include "config/config.h"
-#include "errno/errno.h"
-#include "utils/json_util.h"
+#include <ufile-cppsdk/config.h>
+#include <ufile-cppsdk/errno.h>
+#include <ufile-cppsdk/json_util.h>
 #include <string.h>
 #include <fstream>
 #include <unistd.h>

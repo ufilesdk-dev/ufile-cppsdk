@@ -1,12 +1,12 @@
-#include "api/delete.h"
-#include "api/common.h"
+#include <ufile-cppsdk/delete.h>
+#include <ufile-cppsdk/common.h>
 #include <sstream>
-#include "http/http.h"
-#include "config/config.h"
-#include "errno/errno.h"
-#include "digest/digest.h"
-#include "utils/stream_util.h"
-#include "utils/urlcodec.h"
+#include <ufile-cppsdk/http.h>
+#include <ufile-cppsdk/config.h>
+#include <ufile-cppsdk/errno.h>
+#include <ufile-cppsdk/digest.h>
+#include <ufile-cppsdk/stream_util.h>
+#include <ufile-cppsdk/urlcodec.h>
 
 using namespace ucloud::cppsdk::http;
 using namespace ucloud::cppsdk::utils;

@@ -1,13 +1,13 @@
-#include "http.h"
+#include <ufile-cppsdk/http.h>
 #include <string.h>
 #include <sstream>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include "errno/errno.h"
-#include "utils/network_util.h"
-#include "utils/string_util.h"
+#include <ufile-cppsdk/errno.h>
+#include <ufile-cppsdk/network_util.h>
+#include <ufile-cppsdk/string_util.h>
 
 #if defined(_WIN32)
 #pragma comment(lib, "curllib.lib")

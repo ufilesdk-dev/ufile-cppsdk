@@ -1,17 +1,17 @@
 //first level including
-#include "api/put.h"
-#include "api/common.h"
+#include <ufile-cppsdk/put.h>
+#include <ufile-cppsdk/common.h>
 //C/C++including
 #include <fstream>
 #include <sstream>
 //other local project including
-#include "config/config.h"
-#include "digest/digest.h"
-#include "errno/errno.h"
-#include "http/mimetype.h"
-#include "utils/urlcodec.h"
-#include "utils/string_util.h"
-#include "utils/stream_util.h"
+#include <ufile-cppsdk/config.h>
+#include <ufile-cppsdk/digest.h>
+#include <ufile-cppsdk/errno.h>
+#include <ufile-cppsdk/mimetype.h>
+#include <ufile-cppsdk/urlcodec.h>
+#include <ufile-cppsdk/string_util.h>
+#include <ufile-cppsdk/stream_util.h>
 
 using namespace ucloud::cppsdk::config;
 using namespace ucloud::cppsdk::digest;
