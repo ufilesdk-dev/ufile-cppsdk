@@ -6,7 +6,7 @@
 #include <ostream>
 #include <istream>
 #include <curl/curl.h>
-#include "utils/stream_util.h"
+#include <ufile-cppsdk/stream_util.h>
 
 #define SCHEME ("http://")
 

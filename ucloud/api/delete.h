@@ -1,7 +1,7 @@
 #ifndef _H_UCLOUDSDK_CPP_UCLOUD_API_DELETE_
 #define _H_UCLOUDSDK_CPP_UCLOUD_API_DELETE_
 
-#include "api/apibase.h"
+#include <ufile-cppsdk/apibase.h>
 #include <string>
 
 namespace ucloud {

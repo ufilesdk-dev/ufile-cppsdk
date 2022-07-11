@@ -2,7 +2,7 @@
 #define _UFILESDK_CPP_UCLOUD_API_PUT_
 
 #include <istream>
-#include "api/apibase.h"
+#include <ufile-cppsdk/apibase.h>
 
 namespace ucloud {
 namespace cppsdk {

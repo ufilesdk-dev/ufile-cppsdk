@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.10)
 project(ufile-cppsdk)
 
 include_directories(${PROJECT_SOURCE_DIR}/ucloud)
+include_directories(${PROJECT_SOURCE_DIR}/ucloud/include)
 
 link_directories("/usr/lib")
 link_directories("/usr/local/lib")
@@ -26,6 +27,7 @@ set(head_files
     ${PROJECT_SOURCE_DIR}/ucloud/api/delete.h
     ${PROJECT_SOURCE_DIR}/ucloud/api/mput.h
     ${PROJECT_SOURCE_DIR}/ucloud/api/put.h
+    ${PROJECT_SOURCE_DIR}/ucloud/api/download.h
     ${PROJECT_SOURCE_DIR}/ucloud/base64/base64.h
     ${PROJECT_SOURCE_DIR}/ucloud/config/config.h
     ${PROJECT_SOURCE_DIR}/ucloud/digest/digest.h

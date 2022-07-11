@@ -1,7 +1,7 @@
 #ifndef _H_UFILESDK_CPP_UCLOUD_API_DOWNLOAD_
 #define _H_UFILESDK_CPP_UCLOUD_API_DOWNLOAD_
 
-#include "api/apibase.h"
+#include <ufile-cppsdk/apibase.h>
 #include <string>
 #include <ostream>
 

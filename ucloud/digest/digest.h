@@ -1,7 +1,7 @@
 #ifndef _UFILESDK_CPP_UCOUD_DIGEST_DIGEST_
 #define _UFILESDK_CPP_UCOUD_DIGEST_DIGEST_
 
-#include "http/http.h"
+#include <ufile-cppsdk/http.h>
 #include <string>
 
 namespace ucloud {

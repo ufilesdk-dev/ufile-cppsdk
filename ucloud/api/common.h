@@ -1,7 +1,7 @@
 #ifndef _H_UFILESDK_CPP_UCLOUD_API_COMMON_
 #define _H_UFILESDK_CPP_UCLOUD_API_COMMON_
 
-#include "config/config.h"
+#include <ufile-cppsdk/config.h>
 #include <string>
 #include <istream>
 

@@ -6,7 +6,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "api/api.h"
+#include <ufile-cppsdk/api.h>
 
 void help() {
 
