@@ -8,15 +8,15 @@ namespace cppsdk {
 namespace base64 {
 
 enum {
-    BASE64_URL = 0,
-    BASE64_STD,
+  BASE64_URL = 0,
+  BASE64_STD,
 };
 
-std::string base64_encode(unsigned char const* , unsigned int len, int type);
-std::string base64_decode(std::string const& s, int type);
+std::string base64_encode(unsigned char const *, unsigned int len, int type);
+std::string base64_decode(std::string const &s, int type);
 
-}
-}
-}
+} // namespace base64
+} // namespace cppsdk
+} // namespace ucloud
 
 #endif
