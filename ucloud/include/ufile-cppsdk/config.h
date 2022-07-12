@@ -12,7 +12,7 @@ namespace config {
 /*
 {
     "public_key": "请把您账户的 API 公钥粘贴于此",
-    "private_key": "请把您账户的 API 私钥粘贴于此", 
+    "private_key": "请把您账户的 API 私钥粘贴于此",
     //非北京地域的配置请参考官网文档列出的各个区域的域名
     "proxy_host": ".ufile.ucloud.cn"
 }
@@ -31,8 +31,8 @@ int InitGlobalConfig();
 
 #define USERAGENT ("UFile C++SDK/1.0.4")
 
-}
-}
-}
+} // namespace config
+} // namespace cppsdk
+} // namespace ucloud
 
 #endif

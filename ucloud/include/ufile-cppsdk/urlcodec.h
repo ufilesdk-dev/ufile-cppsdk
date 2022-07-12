@@ -18,8 +18,8 @@ std::string EasyQueryUnescape(const std::string &src);
 std::string EasyPathEscape(const std::string &src);
 std::string EasyPathUnescape(const std::string &src);
 
-}
-}
-}
+} // namespace utils
+} // namespace cppsdk
+} // namespace ucloud
 
 #endif

@@ -2,18 +2,19 @@
 
 namespace ucloud {
 namespace cppsdk {
-namespace api    {
+namespace api {
 
 APIBase::APIBase() {
 
-    m_http = new ucloud::cppsdk::http::HTTPRequest("GET", "/");
+  m_http = new ucloud::cppsdk::http::HTTPRequest("GET", "/");
 }
 
 APIBase::~APIBase() {
 
-    if (m_http) delete m_http;
+  if (m_http)
+    delete m_http;
 }
 
-}
-}
-}
+} // namespace api
+} // namespace cppsdk
+} // namespace ucloud

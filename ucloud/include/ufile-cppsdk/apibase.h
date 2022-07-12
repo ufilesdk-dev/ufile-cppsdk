@@ -5,19 +5,20 @@
 
 namespace ucloud {
 namespace cppsdk {
-namespace api    {
+namespace api {
 
 class APIBase {
 
 public:
-    APIBase();
-    ~APIBase();
+  APIBase();
+  ~APIBase();
+
 protected:
-    ucloud::cppsdk::http::HTTPRequest *m_http;
+  ucloud::cppsdk::http::HTTPRequest *m_http;
 };
 
-}
-}
-}
+} // namespace api
+} // namespace cppsdk
+} // namespace ucloud
 
 #endif

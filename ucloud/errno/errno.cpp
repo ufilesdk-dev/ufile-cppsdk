@@ -1,9 +1,9 @@
-#include <ufile-cppsdk/errno.h>
 #include <map>
+#include <ufile-cppsdk/errno.h>
 
 namespace ucloud {
 namespace cppsdk {
-namespace error  {
+namespace error {
 
 static std::map<int, std::string> errorDesc = {
     {ERR_CPPSDK_MISS_AKSK, "miss publickey/privatekey config"},
@@ -28,11 +28,12 @@ static std::map<int, std::string> errorDesc = {
 
 std::string UFileError::ErrorDesc(const int retcode) {
 
-    std::map<int, std::string>::iterator it = errorDesc.find(retcode);
-    if (it == errorDesc.end()) return "";
-    return it->second;
+  std::map<int, std::string>::iterator it = errorDesc.find(retcode);
+  if (it == errorDesc.end())
+    return "";
+  return it->second;
 }
 
-}
-}
-}
+} // namespace error
+} // namespace cppsdk
+} // namespace ucloud

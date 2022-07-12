@@ -1,9 +1,9 @@
 #ifndef _H_UFILESDK_CPP_UCLOUD_API_COMMON_
 #define _H_UFILESDK_CPP_UCLOUD_API_COMMON_
 
-#include <ufile-cppsdk/config.h>
-#include <string>
 #include <istream>
+#include <string>
+#include <ufile-cppsdk/config.h>
 
 #define SCHEME ("http://")
 
@@ -11,7 +11,7 @@ using namespace ucloud::cppsdk::config;
 
 namespace ucloud {
 namespace cppsdk {
-namespace api    {
+namespace api {
 
 /*
  * @brief: 构造bucket对应的域名
@@ -20,10 +20,10 @@ namespace api    {
  */
 inline std::string UFileHost(const std::string &bucket) {
 
-    std::string host = SCHEME + bucket + UCLOUD_HOST_SUFFIX;
-    if (host[host.size()-1] != '/')
-        host += "/";
-    return host;
+  std::string host = SCHEME + bucket + UCLOUD_HOST_SUFFIX;
+  if (host[host.size() - 1] != '/')
+    host += "/";
+  return host;
 }
 
 /*
@@ -44,7 +44,7 @@ int FetchContentLength(std::istream &is, std::streampos *fsize);
 /*
  * @brief: 获取文件数据
  * @is: 文件输入流
- * @n: 需要获取的字节数 
+ * @n: 需要获取的字节数
  * @data: 数据输出
  * @return: 0=成功，非0=失败
  */
@@ -56,10 +56,11 @@ int PeekData(std::istream &is, const int n, std::string &data);
  * @mimetype: MimeType
  * @return: 0=成功，非0=失败
  */
-int MimeType(std::istream &is, const std::string &filename, std::string &mimetype);
+int MimeType(std::istream &is, const std::string &filename,
+             std::string &mimetype);
 
-}
-}
-}
+} // namespace api
+} // namespace cppsdk
+} // namespace ucloud
 
 #endif
