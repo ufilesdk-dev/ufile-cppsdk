@@ -18,18 +18,20 @@ ucloud 目录:
     该目录是 SDK 具体实现.
 
 使用该 SDK 包时请配置相关配置文件,配置文件的路径为 /etc/ufilesdk.conf 或者 ./ufilesdk.conf
-具体配置格式请参考 SDK 包中的 ucloud/config/config.h 文件的描述.
+具体配置格式请参考 SDK 包中的 ucloud/include/ufile-cppsdk/config.h 文件的描述.
 
 使用步骤:
 
-#编译 sdk 静态库
-1. cd ucloud
-   make clean && make
-   生成 libufilecppsdk.a
+### 编译 sdk 静态库
+mkdir build
+cd build
+cmake ..
+make
+make install
 
-#查阅演示程序
-2. cd ../demo
-   make
+### 查阅演示程序
+cd demo
+./demo
 
-#使用 SDK
-3.  可以使用之前生成的静态库或者直接包含源码目录.
+### 使用 SDK
+可以使用之前生成的静态库或者直接包含源码目录.
