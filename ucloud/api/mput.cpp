@@ -321,7 +321,12 @@ int UFileMput::ParseMuploadResult(const std::string &body,
     UFILE_SET_ERROR(ERR_CPPSDK_PARSE_JSON);
     return ERR_CPPSDK_PARSE_JSON;
   }
-  std::string etag = headers["ETag"];
+  std::string etag;
+  if (headers.find("ETag") != headers.end()) {
+    etag = headers["ETag"];
+  } else {
+    etag = headers["Etag"];
+  }
   if (etag == "") {
     UFILE_SET_ERROR(ERR_CPPSDK_INVALID_ETAG);
     return ERR_CPPSDK_INVALID_ETAG;
