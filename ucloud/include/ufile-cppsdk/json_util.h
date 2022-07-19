@@ -46,6 +46,36 @@ inline int JsonGetSizet(const json_object *root, const std::string &key,
   return ret;
 }
 
+inline int JsonGetBool(const json_object *root, const std::string &key,
+                       bool &value) {
+
+  if (!root)
+    return -1;
+  json_object *node = NULL;
+  if (json_object_object_get_ex((json_object *)root, key.c_str(), &node)) {
+    value = json_object_get_boolean(node);
+    return 0;
+  }
+  //不存在
+  return 1;
+}
+
+inline int JsonGetArray(const json_object *root, const std::string &key,
+                        json_object *&value) {
+  if (!root) {
+    return -1;
+  }
+  json_object *jarray;
+  if (json_object_object_get_ex((json_object *)root, key.c_str(), &jarray)) {
+    if (json_object_get_type(jarray) == json_type_array) {
+      value = jarray;
+      return 0;
+    }
+  }
+  //不存在
+  return 1;
+}
+
 inline int JsonGetString(const std::string &data, const std::string &key,
                          std::string &value) {
 

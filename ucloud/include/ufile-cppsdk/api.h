@@ -3,6 +3,7 @@
 
 #include <ufile-cppsdk/delete.h>
 #include <ufile-cppsdk/download.h>
+#include <ufile-cppsdk/list.h>
 #include <ufile-cppsdk/mput.h>
 #include <ufile-cppsdk/put.h>
 

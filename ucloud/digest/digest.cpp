@@ -84,6 +84,38 @@ int UFileDigest::SignWithRequest(
   return SignWithData(utf8String2Sign, signature);
 }
 
+int UFileDigest::SignWithRequestV2(
+    HTTPRequest *http, const int type, const std::string &bucket,
+    const std::string &key
+    //如果是 multipart 上传的话需要把文件内容的真实 mimetype 传递进来
+    ,
+    const std::string multipartMimetype, std::string &signature,
+    std::string action, std::map<std::string, std::string> params) {
+
+  if (m_ak == "" || m_sk == "") {
+    UFILE_SET_ERROR(ERR_CPPSDK_MISS_AKSK);
+    return ERR_CPPSDK_MISS_AKSK;
+  }
+
+  std::string mimetype = http->ReqHeader("Content-Type");
+  if (http->ReqHeader("multipart/form-data") != "") {
+    mimetype = multipartMimetype;
+  }
+
+  std::string utf8String2Sign = http->HTTPVerb() + "\n" +
+                                http->ReqHeader("Content-MD5") + "\n" +
+                                mimetype + "\n";
+  if (type == HEAD_FIELD_CHECK)
+    utf8String2Sign += http->ReqHeader("Date") + "\n";
+  else
+    utf8String2Sign += http->Query("Expires") + "\n";
+
+  utf8String2Sign += CanonicalizedUCloudHeaders(http);
+  utf8String2Sign += CanonicalizedResource(bucket, key);
+  utf8String2Sign += CanonicalizedURLParams(action, params);
+  return SignWithData(utf8String2Sign, signature);
+}
+
 std::string UFileDigest::Token(const std::string &signature) {
 
   return "UCloud " + m_ak + ":" + signature;
@@ -122,6 +154,20 @@ std::string UFileDigest::CanonicalizedUCloudHeaders(HTTPRequest *http) {
     s += it2->first + ":" + it2->second + "\n";
   }
   return s;
+}
+
+std::string
+UFileDigest::CanonicalizedURLParams(std::string action,
+                                    std::map<std::string, std::string> params) {
+  if (action.empty()) {
+    return "";
+  }
+  std::string result = "\n" + action;
+  for (auto it = params.begin(); it != params.end(); ++it) {
+    result += "\n" + it->first + ":" + it->second;
+  }
+
+  return result;
 }
 
 } // namespace digest
