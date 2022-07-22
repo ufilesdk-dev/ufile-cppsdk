@@ -40,6 +40,7 @@ set(head_files
     ${PROJECT_SOURCE_DIR}/ucloud/include/ufile-cppsdk/stream_util.h
     ${PROJECT_SOURCE_DIR}/ucloud/include/ufile-cppsdk/string_util.h
     ${PROJECT_SOURCE_DIR}/ucloud/include/ufile-cppsdk/urlcodec.h
+    ${PROJECT_SOURCE_DIR}/ucloud/include/ufile-cppsdk/list.h
     )
 
 install(FILES ${head_files} DESTINATION include/ufile-cppsdk/)
