@@ -185,9 +185,17 @@ std::string HTTPRequest::Query(const std::string &k) {
 
 int HTTPRequest::RoundTrip(const UCloudHTTPReadParam *rp,
                            const UCloudHTTPWriteParam *wp,
-                           const UCloudHTTPHeaderParam *hp) {
+                           const UCloudHTTPHeaderParam *hp, bool nobody) {
 
   CURLcode code = CURLE_OK;
+  if (nobody) {
+    code = curl_easy_setopt(m_curl, CURLOPT_NOBODY, 1);
+    if (code != CURLE_OK) {
+      UFILE_SET_ERROR2(ERR_CPPSDK_SET_CURLOPT, curl_easy_strerror(code));
+      return ERR_CPPSDK_SET_CURLOPT;
+    }
+  }
+
   if (wp) {
     code = curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, write_cb);
     if (code != CURLE_OK) {
