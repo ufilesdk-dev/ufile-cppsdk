@@ -22,6 +22,12 @@ int InitGlobalConfig() {
   if (inited)
     return 0;
 
+  if (!UCLOUD_PUBLIC_KEY.empty() && !UCLOUD_PRIVATE_KEY.empty() &&
+      !UCLOUD_HOST_SUFFIX.empty()) {
+    inited = true;
+    return 0;
+  }
+
   std::string conf("");
   if (access("./ufilesdk.conf", R_OK) == 0) {
     conf = "./ufilesdk.conf";
@@ -49,28 +55,43 @@ int InitGlobalConfig() {
   }
 
   std::string dataconf(buf, sz);
-  int ret = JsonGetString(dataconf, "public_key", UCLOUD_PUBLIC_KEY);
-  if (ret) {
-    ifs.close();
-    UFILE_SET_ERROR(ERR_CPPSDK_INVALID_CONFIG);
-    return ERR_CPPSDK_INVALID_CONFIG;
+  if (UCLOUD_PUBLIC_KEY.empty()) {
+    int ret = JsonGetString(dataconf, "public_key", UCLOUD_PUBLIC_KEY);
+    if (ret) {
+      ifs.close();
+      UFILE_SET_ERROR(ERR_CPPSDK_INVALID_CONFIG);
+      return ERR_CPPSDK_INVALID_CONFIG;
+    }
   }
-  ret = JsonGetString(dataconf, "private_key", UCLOUD_PRIVATE_KEY);
-  if (ret) {
-    ifs.close();
-    UFILE_SET_ERROR(ERR_CPPSDK_INVALID_CONFIG);
-    return ERR_CPPSDK_INVALID_CONFIG;
+
+  if (UCLOUD_PRIVATE_KEY.empty()) {
+    int ret = JsonGetString(dataconf, "private_key", UCLOUD_PRIVATE_KEY);
+    if (ret) {
+      ifs.close();
+      UFILE_SET_ERROR(ERR_CPPSDK_INVALID_CONFIG);
+      return ERR_CPPSDK_INVALID_CONFIG;
+    }
   }
-  ret = JsonGetString(dataconf, "proxy_host", UCLOUD_HOST_SUFFIX);
-  if (ret) {
-    ifs.close();
-    UFILE_SET_ERROR(ERR_CPPSDK_INVALID_CONFIG);
-    return ERR_CPPSDK_INVALID_CONFIG;
+
+  if (UCLOUD_HOST_SUFFIX.empty()) {
+    int ret = JsonGetString(dataconf, "proxy_host", UCLOUD_HOST_SUFFIX);
+    if (ret) {
+      ifs.close();
+      UFILE_SET_ERROR(ERR_CPPSDK_INVALID_CONFIG);
+      return ERR_CPPSDK_INVALID_CONFIG;
+    }
   }
+
   ifs.close();
   inited = true;
   return 0;
 }
+
+void UFileSetPublicKey(std::string value) { UCLOUD_PUBLIC_KEY = value; }
+
+void UFileSetPrivateKey(std::string value) { UCLOUD_PRIVATE_KEY = value; }
+
+void UFileSetProxyHost(std::string value) { UCLOUD_HOST_SUFFIX = value; }
 
 } // namespace config
 } // namespace cppsdk

@@ -29,6 +29,12 @@ extern std::string UCLOUD_HOST_SUFFIX;
 
 int InitGlobalConfig();
 
+void UFileSetPublicKey(std::string value);
+
+void UFileSetPrivateKey(std::string value);
+
+void UFileSetProxyHost(std::string value);
+
 #define USERAGENT ("UFile C++SDK/1.0.4")
 
 } // namespace config
