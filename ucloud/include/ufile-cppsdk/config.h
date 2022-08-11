@@ -29,13 +29,16 @@ extern std::string UCLOUD_HOST_SUFFIX;
 
 int InitGlobalConfig();
 
-void UFileSetPublicKey(std::string value);
+/*
+ * 动态修改配置
+ * public_key: 您账户的 API 公钥
+ * private_key: 您账户的 API 私钥
+ * proxy_host: 区域的域名
+ */
+void UFileSetConfig(std::string public_key, std::string private_key,
+                    std::string proxy_host);
 
-void UFileSetPrivateKey(std::string value);
-
-void UFileSetProxyHost(std::string value);
-
-#define USERAGENT ("UFile C++SDK/1.0.4")
+#define USERAGENT ("UFile C++SDK/1.0.5")
 
 } // namespace config
 } // namespace cppsdk
