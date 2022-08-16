@@ -16,9 +16,9 @@ std::string UCLOUD_PUBLIC_KEY;
 std::string UCLOUD_PRIVATE_KEY;
 std::string UCLOUD_HOST_SUFFIX;
 
-int InitGlobalConfig() {
+static bool inited = false;
 
-  static bool inited = false;
+int InitGlobalConfig() {
   if (inited)
     return 0;
 
@@ -55,21 +55,32 @@ int InitGlobalConfig() {
     UFILE_SET_ERROR(ERR_CPPSDK_INVALID_CONFIG);
     return ERR_CPPSDK_INVALID_CONFIG;
   }
+
   ret = JsonGetString(dataconf, "private_key", UCLOUD_PRIVATE_KEY);
   if (ret) {
     ifs.close();
     UFILE_SET_ERROR(ERR_CPPSDK_INVALID_CONFIG);
     return ERR_CPPSDK_INVALID_CONFIG;
   }
+
   ret = JsonGetString(dataconf, "proxy_host", UCLOUD_HOST_SUFFIX);
   if (ret) {
     ifs.close();
     UFILE_SET_ERROR(ERR_CPPSDK_INVALID_CONFIG);
     return ERR_CPPSDK_INVALID_CONFIG;
   }
+
   ifs.close();
   inited = true;
   return 0;
+}
+
+void UFileSetConfig(std::string public_key, std::string private_key,
+                    std::string proxy_host) {
+  UCLOUD_PUBLIC_KEY = public_key;
+  UCLOUD_PRIVATE_KEY = private_key;
+  UCLOUD_HOST_SUFFIX = proxy_host;
+  inited = true;
 }
 
 } // namespace config
