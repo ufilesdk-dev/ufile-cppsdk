@@ -54,7 +54,7 @@ public:
   void AddHeader(const std::string &k, const std::string &v);
   void InitOption();
   int RoundTrip(const UCloudHTTPReadParam *rp, const UCloudHTTPWriteParam *wp,
-                const UCloudHTTPHeaderParam *hp);
+                const UCloudHTTPHeaderParam *hp, bool nobody = false);
   int ResponseCode(long *code);
   int ParseURL();
   int ReqHeaders(std::map<std::string, std::string> &headers);
