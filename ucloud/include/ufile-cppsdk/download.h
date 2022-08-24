@@ -32,11 +32,13 @@ public:
    * @key: 要下载的文件对象名
    * @filepath: 文件本地路径
    * @range: 分片下载的区间，区间为前闭后闭, [begin, end]
+   * @force: 是否覆盖本地已存在的文件, true表示覆盖, false表示不覆盖
    * @return: 0=成功，非0=失败
    */
   int DownloadAsFile(const std::string &bucket, const std::string &key,
                      const std::string &filepath,
-                     const std::pair<ssize_t, ssize_t> *range = NULL);
+                     const std::pair<ssize_t, ssize_t> *range = NULL,
+                     bool force = false);
 
   /*
    * @brief: 生成带签名的下载url
@@ -47,8 +49,6 @@ public:
    */
   std::string DownloadURL(const std::string &bucket, const std::string &key,
                           const size_t expires = 0);
-
-  std::string GetTempFilePath(const std::string &filepath);
 
 private:
   void SetResource(const std::string &bucket, const std::string &key);

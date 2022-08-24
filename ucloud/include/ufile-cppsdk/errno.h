@@ -27,6 +27,7 @@ enum {
   ERR_CPPSDK_INVALID_ETAG = ERR_CPPSDK_BASE - 17,
   ERR_CPPSDK_NO_CONFIG = ERR_CPPSDK_BASE - 18,
   ERR_CPPSDK_INVALID_CONFIG = ERR_CPPSDK_BASE - 19,
+  ERR_CPPSDK_FILE_ALREADY_EXIST = ERR_CPPSDK_BASE - 20,
 };
 
 class UFileError {
@@ -59,7 +60,7 @@ private:
 
 #define UFILE_SET_ERROR(retcode)                                               \
   {                                                                            \
-    const char *errdesc = UFILE_ERROR_DESC(retcode).c_str();                   \
+    std::string errdesc = UFILE_ERROR_DESC(retcode);                           \
     ucloud::cppsdk::error::UFileError::Instance().SetError(retcode, errdesc);  \
   }
 

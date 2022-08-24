@@ -24,6 +24,7 @@ static std::map<int, std::string> errorDesc = {
     {ERR_CPPSDK_INVALID_ETAG, "invalid etag"},
     {ERR_CPPSDK_NO_CONFIG, "no config found"},
     {ERR_CPPSDK_INVALID_CONFIG, "invalid config"},
+    {ERR_CPPSDK_FILE_ALREADY_EXIST, "file already exist"},
 };
 
 std::string UFileError::ErrorDesc(const int retcode) {
