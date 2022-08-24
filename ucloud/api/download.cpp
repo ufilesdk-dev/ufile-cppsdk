@@ -101,7 +101,9 @@ int UFileDownload::DownloadAsFile(const std::string &bucket,
   if (ret)
     return ret;
 
-  std::ofstream ofs(filepath.c_str(), std::ofstream::out | std::ofstream::app);
+  std::string temp_filepath = GetTempFilePath(filepath);
+  std::ofstream ofs(temp_filepath.c_str(),
+                    std::ofstream::out | std::ofstream::app);
   if (!ofs) {
     UFILE_SET_ERROR(ERR_CPPSDK_CLIENT_INTERNAL);
     return ERR_CPPSDK_CLIENT_INTERNAL;
@@ -109,6 +111,11 @@ int UFileDownload::DownloadAsFile(const std::string &bucket,
 
   ret = this->Download(bucket, key, &ofs, range);
   ofs.close();
+  if (ret) {
+    ::remove(temp_filepath.c_str());
+  } else {
+    ret = ::rename(temp_filepath.c_str(), filepath.c_str());
+  }
   return ret;
 }
 
@@ -145,6 +152,10 @@ std::string UFileDownload::DownloadURL(const std::string &bucket,
   if (expires)
     token += "&Expires=" + EasyQueryEscape(std::string(expires_str));
   return token;
+}
+
+std::string UFileDownload::GetTempFilePath(const std::string &filepath) {
+  return filepath + ".temp";
 }
 
 void UFileDownload::SetResource(const std::string &bucket,

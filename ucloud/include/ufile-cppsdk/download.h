@@ -48,6 +48,8 @@ public:
   std::string DownloadURL(const std::string &bucket, const std::string &key,
                           const size_t expires = 0);
 
+  std::string GetTempFilePath(const std::string &filepath);
+
 private:
   void SetResource(const std::string &bucket, const std::string &key);
 
