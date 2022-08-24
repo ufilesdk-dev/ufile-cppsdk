@@ -10,6 +10,7 @@
 #include <ufile-cppsdk/json_util.h>
 #include <ufile-cppsdk/mput.h>
 #include <ufile-cppsdk/stream_util.h>
+#include <ufile-cppsdk/string_util.h>
 #include <ufile-cppsdk/urlcodec.h>
 #include <unistd.h>
 
@@ -167,6 +168,7 @@ int UFileMput::MUpload(ssize_t blk_idx) {
   m_http->Reset();
   m_http->SetVerb("PUT");
   m_http->AddHeader("Content-Type", m_mimetype);
+  m_http->AddHeader("Content-Length", SIZET2STR(bsize));
   m_http->AddHeader("User-Agent", USERAGENT);
   m_http->SetURL(MUploadURL());
 
