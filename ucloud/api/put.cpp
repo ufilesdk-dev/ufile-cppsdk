@@ -51,7 +51,7 @@ int UFilePut::Put(const std::string &bucket, const std::string &key,
   m_http->Reset();
   m_http->SetVerb("PUT");
   m_http->AddHeader("Content-Type", mimetype);
-  // m_http->AddHeader("Content-Length", SIZET2STR(fsize));
+  m_http->AddHeader("Content-Length", SIZET2STR(fsize));
   m_http->AddHeader("Expect", "");
   m_http->AddHeader("User-Agent", USERAGENT);
   m_http->SetURL(UFileHost(bucket) + EasyPathEscape(key));

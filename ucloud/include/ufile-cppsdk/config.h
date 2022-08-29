@@ -29,8 +29,7 @@ extern std::string UCLOUD_HOST_SUFFIX;
 
 int InitGlobalConfig();
 
-
-#define USERAGENT ("UFile C++SDK/1.0.6")
+#define USERAGENT ("UFile C++SDK/1.0.7")
 
 /*
  * 动态修改配置
@@ -40,7 +39,6 @@ int InitGlobalConfig();
  */
 void UFileSetConfig(std::string public_key, std::string private_key,
                     std::string proxy_host);
-
 
 } // namespace config
 } // namespace cppsdk

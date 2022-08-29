@@ -1,6 +1,7 @@
 #include <fstream>
 #include <sstream>
 #include <string.h>
+#include <sys/stat.h>
 #include <ufile-cppsdk/common.h>
 #include <ufile-cppsdk/config.h>
 #include <ufile-cppsdk/digest.h>
@@ -95,13 +96,23 @@ int UFileDownload::Download(const std::string &bucket, const std::string &key,
 int UFileDownload::DownloadAsFile(const std::string &bucket,
                                   const std::string &key,
                                   const std::string &filepath,
-                                  const std::pair<ssize_t, ssize_t> *range) {
+                                  const std::pair<ssize_t, ssize_t> *range,
+                                  bool force) {
 
   int64_t ret = InitGlobalConfig();
   if (ret)
     return ret;
 
-  std::ofstream ofs(filepath.c_str(), std::ofstream::out | std::ofstream::app);
+  if (!force) {
+    struct stat buf;
+    if (::stat(filepath.c_str(), &buf) == 0) {
+      UFILE_SET_ERROR(ERR_CPPSDK_FILE_ALREADY_EXIST);
+      return ERR_CPPSDK_FILE_ALREADY_EXIST;
+    }
+  }
+
+  std::ofstream ofs(filepath.c_str(),
+                    std::ofstream::out | std::ofstream::trunc);
   if (!ofs) {
     UFILE_SET_ERROR(ERR_CPPSDK_CLIENT_INTERNAL);
     return ERR_CPPSDK_CLIENT_INTERNAL;
@@ -109,6 +120,7 @@ int UFileDownload::DownloadAsFile(const std::string &bucket,
 
   ret = this->Download(bucket, key, &ofs, range);
   ofs.close();
+
   return ret;
 }
 
