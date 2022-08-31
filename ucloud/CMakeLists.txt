@@ -24,7 +24,6 @@ add_library(ufilecppsdk STATIC
 
 target_link_libraries(ufilecppsdk
 	              tcmalloc
-		      curl
-		      magic)
+		      curl)
 
 install(TARGETS ufilecppsdk ARCHIVE DESTINATION lib)

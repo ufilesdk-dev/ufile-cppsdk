@@ -35,7 +35,7 @@ int UFilePut::Put(const std::string &bucket, const std::string &key,
     return ret;
 
   std::string mimetype;
-  ret = MimeType(is, "", mimetype);
+  ret = MimeType(m_filename, mimetype);
   if (ret)
     return ret;
 
@@ -142,6 +142,8 @@ int UFilePut::PutFile(const std::string &bucket, const std::string &key,
     UFILE_SET_ERROR(ERR_CPPSDK_FILE_READ);
     return ERR_CPPSDK_FILE_READ;
   }
+
+  m_filename = filepath;
 
   ret = this->Put(bucket, key, ifs);
   ifs.close();

@@ -8,6 +8,5 @@ add_executable(demo ${demo_source_files})
 
 target_link_libraries(demo
 	              curl
-		      magic
 		      json-c
                       ${sdk_lib})
