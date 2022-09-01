@@ -14,23 +14,6 @@
   yum install gperftools
 ```
 
-### 安装libmagic
-
-#### For Debian-based systems:
-```
-  apt-get install libmagic-dev
-```
-
-#### For CentOS 6.x or similar RPM-based systems:
-```
-  yum install file-devel
-```
-
-#### For CentOS 5.x or similar RPM-based systems:
-```
-  yum install file
-```
-
 ### 安装libcurl
 ```
   yum install libcurl-devel

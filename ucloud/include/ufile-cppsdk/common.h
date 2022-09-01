@@ -51,13 +51,11 @@ int FetchContentLength(std::istream &is, std::streampos *fsize);
 int PeekData(std::istream &is, const int n, std::string &data);
 /*
  * @brief: 获取文件MimeType
- * @is: 文件输入流
  * @filename: 文件本地路径
  * @mimetype: MimeType
  * @return: 0=成功，非0=失败
  */
-int MimeType(std::istream &is, const std::string &filename,
-             std::string &mimetype);
+int MimeType(const std::string &filename, std::string &mimetype);
 
 } // namespace api
 } // namespace cppsdk

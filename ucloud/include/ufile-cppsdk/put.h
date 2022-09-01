@@ -41,6 +41,9 @@ public:
    */
   int PutFile(const std::string &bucket, const std::string &key,
               const std::string &filepath);
+
+private:
+  std::string m_filename;
 };
 
 } // namespace api

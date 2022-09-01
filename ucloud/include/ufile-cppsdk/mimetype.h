@@ -2,7 +2,6 @@
 #define _UFILESDK_CPP_UCLOUD_HTTP_MIMETYPE_
 
 #include <libgen.h>
-#include <magic.h>
 #include <map>
 #include <string.h>
 #include <string>
@@ -15,9 +14,6 @@ class MimeTypeInducer {
 
 private:
   MimeTypeInducer() {
-    m_magic = magic_open(MAGIC_CONTINUE | MAGIC_ERROR | MAGIC_MIME);
-    magic_load(m_magic, NULL);
-
     m_mimetypes = {
         {".3dm", "x-world/x-3dmf"},
         {".3dmf", "x-world/x-3dmf"},
@@ -457,23 +453,14 @@ private:
   }
 
 public:
-  ~MimeTypeInducer() { magic_close(m_magic); }
-
   static MimeTypeInducer &Instance() {
     static MimeTypeInducer instance;
     return instance;
   }
 
-  std::string InduceType(const std::string &filename, const void *data,
-                         const size_t &length) {
+  std::string InduceType(const std::string &filename) {
     char *pos = strchr(basename((char *)filename.c_str()), '.');
     if (!pos || filename == "") {
-      if (data) {
-        const char *mt = magic_buffer(m_magic, data, length);
-        if (!mt)
-          return "application/octet-stream";
-        return std::string(mt);
-      }
       return "application/octet-stream";
     }
 
@@ -485,7 +472,6 @@ public:
   }
 
 private:
-  magic_t m_magic;
   std::map<std::string, std::string> m_mimetypes;
 };
 

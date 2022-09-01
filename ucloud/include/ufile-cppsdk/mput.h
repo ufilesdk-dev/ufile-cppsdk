@@ -100,6 +100,7 @@ private:
 
   std::istream *m_is;
   std::ifstream *m_file_stream;
+  std::string m_filename;
 };
 
 } // namespace api

@@ -63,6 +63,7 @@ int UFileMput::SetUploadFile(const std::string &filepath) {
     return ERR_CPPSDK_CLIENT_INTERNAL;
   }
   m_is = m_file_stream;
+  m_filename = filepath;
   return 0;
 }
 
@@ -157,7 +158,7 @@ int UFileMput::MUpload(ssize_t blk_idx) {
 
   //获取文件 mimetype
   if (m_mimetype == "") {
-    ret = MimeType(*m_is, "", m_mimetype);
+    ret = MimeType(m_filename, m_mimetype);
     if (ret)
       return ret;
   }

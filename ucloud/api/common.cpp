@@ -90,17 +90,8 @@ int PeekData(std::istream &is, const int n, std::string &data) {
   return 0;
 }
 
-int MimeType(std::istream &is, const std::string &filename,
-             std::string &mimetype) {
-
-  std::string first1024("");
-  int ret = PeekData(is, 1024, first1024);
-  if (ret < 0 || first1024.size() == 0) {
-    UFILE_SET_ERROR(ERR_CPPSDK_FILE_READ);
-    return ERR_CPPSDK_FILE_READ;
-  }
-  mimetype = MimeTypeInducer::Instance().InduceType(filename, first1024.c_str(),
-                                                    first1024.size());
+int MimeType(const std::string &filename, std::string &mimetype) {
+  mimetype = MimeTypeInducer::Instance().InduceType(filename);
   return 0;
 }
 
