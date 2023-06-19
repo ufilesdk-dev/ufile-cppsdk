@@ -103,3 +103,5 @@ int main() {
 ```
   g++ mydemo.cc -o mydemo -lufilecppsdk -lcurl -lmagic -ljson-c
 ```
+## 许可证
+[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)   
