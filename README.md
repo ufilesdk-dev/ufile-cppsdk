@@ -1,3 +1,7 @@
+# UCloud US3 SDK for C++
+
+[![Software License](https://img.shields.io/github/license/saltstack/salt)](LICENSE)
+
 本源码包含使用 C++ SDK 对 UCloud 的对象存储业务US3 (原名UFile) 进行上传/下载等文件操作,
 不包含对 Bucket 的管理操作,如有任何疑问请咨询 UCloud 技术支持.  
 
