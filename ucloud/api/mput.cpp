@@ -222,6 +222,81 @@ int UFileMput::MUpload(ssize_t blk_idx) {
   return ret;
 }
 
+int UFileMput::MUploadCopyPart(ssize_t blk_idx, std::string src_bucket_name,
+                               std::string src_object, size_t offset,
+                               size_t length, std::string mimetype) {
+
+  int64_t ret = InitGlobalConfig();
+  if (ret)
+    return ret;
+
+  if (blk_idx != -1)
+    m_blk_idx = blk_idx;
+
+  //开始上传数据
+  std::string signature("");
+  //构建 HTTP 头部
+  m_http->Reset();
+  m_http->SetVerb("PUT");
+  m_http->AddHeader("X-Ufile-Copy-Source",
+                    std::string("/") + std::string(src_bucket_name) +
+                        std::string("/") + std::string(src_object));
+  m_http->AddHeader("X-Ufile-Copy-Source-Range",
+                    std::string("bytes=") + std::string(SIZET2STR(offset)) +
+                        std::string("-") +
+                        std::string(SIZET2STR(offset + length - 1)));
+  m_http->AddHeader("Content-Type", mimetype);
+  m_http->AddHeader("Content-Length", SIZET2STR(0));
+  m_http->AddHeader("User-Agent", USERAGENT);
+  m_http->SetURL(MUploadURL());
+
+  //使用 HTTP 信息构建签名
+  UFileDigest digestor;
+  ret = digestor.SignWithRequest(m_http, HEAD_FIELD_CHECK, m_bucket, m_key, "",
+                                 signature);
+  if (ret) {
+    return ret;
+  }
+  m_http->AddHeader("Authorization", digestor.Token(signature));
+
+  //设置输出
+  std::ostringstream oss, hss;
+  UCloudOStream data_stream(&oss);
+  UCloudOStream header_stream(&hss);
+  UCloudHTTPWriteParam wp = {f : NULL, os : &data_stream};
+  UCloudHTTPHeaderParam hp = {f : NULL, os : &header_stream};
+  ret = m_http->RoundTrip(NULL, &wp, &hp);
+  if (ret) {
+    UFILE_SET_ERROR2(ERR_CPPSDK_SEND_HTTP, UFILE_LAST_ERRMSG());
+    return ERR_CPPSDK_SEND_HTTP;
+  }
+
+  //解析回应
+  long code = 200;
+  ret = m_http->ResponseCode(&code);
+  if (ret) {
+    UFILE_SET_ERROR(ERR_CPPSDK_CURL);
+    return ERR_CPPSDK_CURL;
+  }
+
+  std::string errmsg;
+  if (code != 200) {
+    int parse_ret = UFileErrorRsp(oss.str().c_str(), &ret, errmsg);
+    if (parse_ret) {
+      UFILE_SET_ERROR(ERR_CPPSDK_CLIENT_INTERNAL);
+      return ERR_CPPSDK_CLIENT_INTERNAL;
+    }
+    UFILE_SET_ERROR2(ret, errmsg);
+  } else {
+    ret = ParseMuploadResult(oss.str(), hss.str());
+    if (ret) {
+      return ret;
+    }
+    m_uploaded_size += length;
+  }
+  return ret;
+}
+
 int UFileMput::MFinish(const std::map<size_t, std::string> *etags) {
 
   int64_t ret = InitGlobalConfig();

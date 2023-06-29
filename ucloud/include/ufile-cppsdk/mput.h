@@ -57,6 +57,21 @@ public:
    * @return: 0=成功，非0=失败
    */
   int MUpload(ssize_t blk_idx = -1);
+
+  /*
+   * @brief: copy文件分片
+   * @blk_idx: 分片编号
+   * @src_bucket_name: 源Bucket名称
+   * @src_object: 源文件对象名称
+   * @offset: 源文件偏移
+   * @length: 要copy的长度
+   * @mimetype: 目标文件的MIME类型
+   * @return: 0=成功，非0=失败
+   */
+  int MUploadCopyPart(ssize_t blk_idx, std::string src_bucket_name,
+                      std::string src_object, size_t offset, size_t length,
+                      std::string mimetype = "application/octet-stream");
+
   /*
    * @brief: 分片上传完成
    * @etags: 分片编号与ETag的映射表
@@ -75,6 +90,10 @@ public:
    * @brief: 已上传的文件大小
    */
   inline size_t UploadedSize() { return m_uploaded_size; }
+  /*
+   * @brief: 分片上传的块大小
+   */
+  inline size_t BlkSize() { return m_blksize; }
 
 private:
   int ParseInitResult(const std::string &data);
