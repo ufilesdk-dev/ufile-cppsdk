@@ -19,6 +19,9 @@ void help() {
   std::cerr << "./demo download2 bucket key storedfile [range_begin-range_end]"
             << std::endl;
   std::cerr << "./demo showurl bucket key [expires]" << std::endl;
+  std::cerr << "./demo mputcopypart src_bucket src_key src_offset dst_bucket "
+               "dst_key size [mimetype]"
+            << std::endl;
 }
 
 //普通上传
@@ -103,6 +106,63 @@ int mputfile(int argc, char **argv) {
     return ret;
   }
   std::cout << "mput file success" << std::endl;
+  return 0;
+}
+
+// 分片拷贝
+int mputcopypart(int argc, char **argv) {
+
+  if (argc < 6 || argc > 7) {
+    std::cerr << "./demo mputcopypart src_bucket src_key src_offset dst_bucket "
+                 "dst_key size [mimetype]"
+              << std::endl;
+    return -1;
+  }
+
+  std::string mimetype = "application/octet-stream";
+  if (argc == 7) {
+    mimetype = argv[6];
+  }
+
+  ucloud::cppsdk::api::UFileMput uploader;
+  uploader.SetResource(argv[3], argv[4]);
+  int ret = uploader.MInit();
+  if (ret) {
+    std::cerr << "minit error: retcode=" << UFILE_LAST_RETCODE()
+              << ", errmsg=" << UFILE_LAST_ERRMSG() << std::endl;
+    return ret;
+  }
+
+  ssize_t blk = 0;
+  size_t src_offset = std::stoull(argv[2]);
+  size_t total_size = std::stoull(argv[5]);
+  while (uploader.UploadedSize() < total_size) {
+    for (int i = 0; i < 20; ++i)
+      std::cerr << '\b';
+    std::cerr << "finished: " << uploader.UploadedSize() * 100 / total_size
+              << "%\n";
+    size_t left = total_size - uploader.UploadedSize();
+    size_t blk_size = uploader.BlkSize();
+    if (left < blk_size) {
+      blk_size = left;
+    }
+    ret = uploader.MUploadCopyPart(blk++, argv[0], argv[1], src_offset,
+                                   blk_size, mimetype);
+    if (ret) {
+      std::cerr << "mputcopypart error: retcode=" << UFILE_LAST_RETCODE()
+                << ", errmsg=" << UFILE_LAST_ERRMSG() << std::endl;
+      return ret;
+    }
+    src_offset += blk_size;
+  }
+  std::cerr << std::endl;
+  ret = uploader.MFinish(NULL);
+  if (ret) {
+    std::cerr << "mputcopypart error: retcode=" << UFILE_LAST_RETCODE()
+              << ", errmsg=" << UFILE_LAST_ERRMSG() << std::endl;
+    return ret;
+  }
+  std::cout << "mputcopypart success" << std::endl;
   return 0;
 }
 
@@ -227,6 +287,8 @@ int dispatch(int argc, char **argv) {
     ret = deletefile(argc - 1, argv + 1);
   } else if (memcmp(cmd, "putstr", strlen(cmd)) == 0) {
     ret = putstr(argc - 1, argv + 1);
+  } else if (memcmp(cmd, "mputcopypart", strlen(cmd)) == 0) {
+    ret = mputcopypart(argc - 1, argv + 1);
   }
   return ret;
 }

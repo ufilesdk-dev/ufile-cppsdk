@@ -29,7 +29,7 @@ extern std::string UCLOUD_HOST_SUFFIX;
 
 int InitGlobalConfig();
 
-#define USERAGENT ("UFile C++SDK/1.0.8")
+#define USERAGENT ("UFile C++SDK/1.0.9")
 
 /*
  * 动态修改配置
