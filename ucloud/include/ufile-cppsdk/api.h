@@ -7,6 +7,7 @@
 #include <ufile-cppsdk/list.h>
 #include <ufile-cppsdk/mput.h>
 #include <ufile-cppsdk/put.h>
+#include <ufile-cppsdk/tagging.h>
 
 #include <ufile-cppsdk/config.h>
 #include <ufile-cppsdk/errno.h>

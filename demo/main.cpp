@@ -22,6 +22,10 @@ void help() {
   std::cerr << "./demo mputcopypart src_bucket src_key src_offset dst_bucket "
                "dst_key size [mimetype]"
             << std::endl;
+  std::cerr << "./demo puttagging bucket key tag1 value1 [tag2 value2 ...]"
+            << std::endl;
+  std::cerr << "./demo gettagging bucket key" << std::endl;
+  std::cerr << "./demo deletetagging bucket key" << std::endl;
 }
 
 //普通上传
@@ -235,6 +239,91 @@ int download_as_stream(int argc, char **argv) {
   return 0;
 }
 
+//设置tagging
+int put_tagging(int argc, char **argv) {
+  if (argc < 4 || argc % 2 != 0) {
+    std::cerr << "./demo puttagging bucket key tag1 value1 [tag2 value2 ...]"
+              << std::endl;
+    return -1;
+  }
+
+  std::string bucket = argv[0];
+  std::string key = argv[1];
+
+  argv += 2;
+  argc -= 2;
+  std::map<std::string, std::string> tags;
+  while (argc > 0) {
+    std::string tag = argv[0];
+    std::string value = argv[1];
+    auto insert_ret = tags.insert(std::make_pair(tag, value));
+    if (!insert_ret.second) {
+      std::cerr << "duplicate tag: " << tag << std::endl;
+      return -1;
+    }
+
+    argv += 2;
+    argc -= 2;
+  }
+  ucloud::cppsdk::api::UFileTagging putter;
+  int ret = putter.PutTagging(bucket, key, tags);
+  if (ret) {
+    std::cerr << "put tagging error: retcode=" << UFILE_LAST_RETCODE()
+              << ", errmsg=" << UFILE_LAST_ERRMSG() << std::endl;
+    return ret;
+  }
+  std::cout << "put tagging success" << std::endl;
+  return 0;
+}
+
+//获取tagging
+int get_tagging(int argc, char **argv) {
+  if (argc != 2) {
+    std::cerr << "./demo gettagging bucket key" << std::endl;
+    return -1;
+  }
+
+  std::string bucket = argv[0];
+  std::string key = argv[1];
+
+  std::map<std::string, std::string> tags;
+  ucloud::cppsdk::api::UFileTagging getter;
+  int ret = getter.GetTagging(bucket, key, &tags);
+  if (ret) {
+    std::cerr << "get tagging error: retcode=" << UFILE_LAST_RETCODE()
+              << ", errmsg=" << UFILE_LAST_ERRMSG() << std::endl;
+    return ret;
+  }
+  std::cout << "get tagging success" << std::endl;
+  std::cout << "{" << std::endl;
+  for (auto &tag : tags) {
+    std::cout << "  " << tag.first << ": " << tag.second << std::endl;
+  }
+  std::cout << "}" << std::endl;
+  return 0;
+}
+
+//删除tagging
+int delete_tagging(int argc, char **argv) {
+  if (argc != 2) {
+    std::cerr << "./demo deletetagging bucket key" << std::endl;
+    return -1;
+  }
+
+  std::string bucket = argv[0];
+  std::string key = argv[1];
+
+  ucloud::cppsdk::api::UFileTagging deleter;
+  int ret = deleter.DeleteTagging(bucket, key);
+  if (ret) {
+    std::cerr << "delete tagging error: retcode=" << UFILE_LAST_RETCODE()
+              << ", errmsg=" << UFILE_LAST_ERRMSG() << std::endl;
+    return ret;
+  }
+  std::cout << "delete tagging success" << std::endl;
+  return 0;
+}
+
 int showurl(int argc, char **argv) {
 
   size_t expires = 0;
@@ -289,6 +378,16 @@ int dispatch(int argc, char **argv) {
     ret = putstr(argc - 1, argv + 1);
   } else if (memcmp(cmd, "mputcopypart", strlen(cmd)) == 0) {
     ret = mputcopypart(argc - 1, argv + 1);
+  } else if (memcmp(cmd, "puttagging", strlen(cmd)) == 0) {
+    ret = put_tagging(argc - 1, argv + 1);
+  } else if (memcmp(cmd, "gettagging", strlen(cmd)) == 0) {
+    ret = get_tagging(argc - 1, argv + 1);
+  } else if (memcmp(cmd, "deletetagging", strlen(cmd)) == 0) {
+    ret = delete_tagging(argc - 1, argv + 1);
+  } else {
+    std::cerr << "unknown command: " << cmd << std::endl;
+    help();
+    ret = -1;
   }
   return ret;
 }
