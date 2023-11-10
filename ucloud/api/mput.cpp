@@ -45,6 +45,10 @@ void UFileMput::SetUploadId(const std::string &uploadid) {
   m_uploadid = uploadid;
 }
 
+std::string UFileMput::GetUploadId() {
+  return m_uploadid;
+}
+
 int UFileMput::SetUploadFile(const std::string &filepath) {
 
   if (access(filepath.c_str(), R_OK)) {

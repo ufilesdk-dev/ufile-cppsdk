@@ -26,6 +26,7 @@ void help() {
             << std::endl;
   std::cerr << "./demo gettagging bucket key" << std::endl;
   std::cerr << "./demo deletetagging bucket key" << std::endl;
+  std::cerr << "./demo mput_and_listparts bucket key file" << std::endl;
 }
 
 //普通上传
@@ -324,6 +325,89 @@ int delete_tagging(int argc, char **argv) {
   return 0;
 }
 
+//分片上传并列出分片信息
+int mput_and_listparts(int argc, char **argv) {
+  if (argc != 3) {
+    std::cerr << "./demo mput_and_listparts bucket key file" << std::endl;
+    return -1;
+  }
+
+  std::string bucket_name = argv[0];
+  std::string key = argv[1];
+  std::string local_file = argv[2];
+
+  ucloud::cppsdk::api::UFileMput uploader;
+  uploader.SetResource(bucket_name, key);
+  uploader.SetUploadFile(local_file);
+  int ret = uploader.MInit();
+  if (ret) {
+    std::cerr << "minit error: retcode=" << UFILE_LAST_RETCODE()
+              << ", errmsg=" << UFILE_LAST_ERRMSG() << std::endl;
+    return ret;
+  }
+
+  struct stat st;
+  if (stat(local_file.c_str(), &st)) {
+    std::cerr << strerror(errno) << std::endl;
+    return -1;
+  }
+
+  ssize_t blk = 0;
+  while (uploader.UploadedSize() < size_t(st.st_size)) {
+    std::cout << "finished: " << uploader.UploadedSize() * 100 / st.st_size
+              << "%\r" << std::flush;
+    ret = uploader.MUpload(blk++);
+    if (ret) {
+      std::cerr << "mupload error: retcode=" << UFILE_LAST_RETCODE()
+                << ", errmsg=" << UFILE_LAST_ERRMSG() << std::endl;
+      return ret;
+    }
+  }
+  std::cout << std::endl;
+
+  std::string uploadid = uploader.GetUploadId();
+
+  ucloud::cppsdk::api::UFileListParts lister;
+  ucloud::cppsdk::api::ListPartsResult result;
+  bool is_truncated = true;
+  int32_t next_marker;
+  int32_t marker = 0; 
+  uint32_t total = 0;
+  while (is_truncated) {
+    ucloud::cppsdk::api::ListPartsResult batch;
+    int ret = lister.ListParts(bucket_name, uploadid, 1000, &batch,
+        &is_truncated, &next_marker, marker);
+    if (ret) {
+      std::cerr << "listparts error: retcode=" << UFILE_LAST_RETCODE() \
+                << ", errmsg=" << UFILE_LAST_ERRMSG() << std::endl;
+      return ret;
+    }   
+
+    marker = next_marker;
+    total += batch.size(); 
+    result.insert(result.end(), batch.begin(), batch.end());
+  }
+
+  ret = uploader.MFinish(NULL);
+  if (ret) {
+    std::cerr << "mupload error: retcode=" << UFILE_LAST_RETCODE()
+              << ", errmsg=" << UFILE_LAST_ERRMSG() << std::endl;
+    return ret;
+  }
+  std::cout << "mput file success" << std::endl;
+
+  std::cout << "Total Part Num: " << total << std::endl;
+  for (auto it = result.begin(); it != result.end(); ++it) {
+    ucloud::cppsdk::api::ListPartsResultEntry &part = *it;
+    std::cout << "Part Number: " << part.part_number << " {" << std::endl;
+    std::cout << "\tEtag: " << part.etag << std::endl;
+    std::cout << "\tLastModified: " << part.last_modified << std::endl;
+    std::cout << "\tSize: " << part.size << std::endl;
+    std::cout << "}" << std::endl;
+  }
+  return 0;
+}
+
 int showurl(int argc, char **argv) {
 
   size_t expires = 0;
@@ -384,6 +468,8 @@ int dispatch(int argc, char **argv) {
     ret = get_tagging(argc - 1, argv + 1);
   } else if (memcmp(cmd, "deletetagging", strlen(cmd)) == 0) {
     ret = delete_tagging(argc - 1, argv + 1);
+  } else if (memcmp(cmd, "mput_and_listparts", strlen(cmd)) == 0) {
+    ret = mput_and_listparts(argc - 1, argv + 1);
   } else {
     std::cerr << "unknown command: " << cmd << std::endl;
     help();

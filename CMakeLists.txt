@@ -43,6 +43,7 @@ set(head_files
     ${PROJECT_SOURCE_DIR}/ucloud/include/ufile-cppsdk/list.h
     ${PROJECT_SOURCE_DIR}/ucloud/include/ufile-cppsdk/headfile.h
     ${PROJECT_SOURCE_DIR}/ucloud/include/ufile-cppsdk/tagging.h
+    ${PROJECT_SOURCE_DIR}/ucloud/include/ufile-cppsdk/listparts.h
     )
 
 install(FILES ${head_files} DESTINATION include/ufile-cppsdk/)
