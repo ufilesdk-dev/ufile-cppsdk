@@ -35,6 +35,34 @@ inline int JsonGetInt64(const json_object *root, const std::string &key,
   return 1;
 }
 
+inline int JsonGetUInt64(const json_object *root, const std::string &key,
+                         uint64_t &value) {
+
+  if (!root)
+    return -1;
+  json_object *node = NULL;
+  if (json_object_object_get_ex((json_object *)root, key.c_str(), &node)) {
+    value = json_object_get_uint64(node);
+    return 0;
+  }
+  //不存在
+  return 1;
+}
+
+inline int JsonGetInt32(const json_object *root, const std::string &key,
+                        int32_t &value) {
+
+  if (!root)
+    return -1;
+  json_object *node = NULL;
+  if (json_object_object_get_ex((json_object *)root, key.c_str(), &node)) {
+    value = json_object_get_int(node);
+    return 0;
+  }
+  //不存在
+  return 1;
+}
+
 inline int JsonGetSizet(const json_object *root, const std::string &key,
                         size_t &value) {
 

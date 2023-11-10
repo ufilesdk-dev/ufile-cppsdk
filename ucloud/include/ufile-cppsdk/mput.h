@@ -34,6 +34,11 @@ public:
    */
   void SetUploadId(const std::string &uploadid);
   /*
+   * @brief: 获得本次分片上传的上传Id
+   * @return: 分片上传的上传Id(如果没有执行MInit, 返回空字符串)
+   */
+  std::string GetUploadId();
+  /*
    * @brief: 设置上传文件路径，并打开文件
    * @filepath: 文件的本地路径
    * @return: 0=成功，非0=失败
