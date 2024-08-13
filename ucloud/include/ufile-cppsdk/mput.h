@@ -64,6 +64,15 @@ public:
   int MUpload(ssize_t blk_idx = -1);
 
   /*
+   * @brief: 上传分片
+   * @blk_idx: 分片编号
+   * @data: 要上传的分片数据
+   * @len: 分片数据的长度
+   * @return: 0=成功，非0=失败
+   */
+  int MUpload(ssize_t blk_idx, const char *data, size_t len);
+
+  /*
    * @brief: copy文件分片
    * @blk_idx: 分片编号
    * @src_bucket_name: 源Bucket名称

@@ -4,6 +4,7 @@
 #include <ostream>
 #include <string>
 #include <vector>
+#include <streambuf>
 
 namespace ucloud {
 namespace cppsdk {
@@ -121,6 +122,15 @@ public:
 
 private:
   std::vector<UCloudOStream *> m_osv;
+};
+
+class UCloudStreamBuf : public std::streambuf {
+public:
+  UCloudStreamBuf(const char *data, size_t size) {
+    char *base = const_cast<char *>(data);
+    // 设置左右边界以及读指针位置
+    setg(base, base, base + size);
+  }
 };
 
 } // namespace utils

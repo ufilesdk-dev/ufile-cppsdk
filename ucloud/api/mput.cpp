@@ -30,8 +30,12 @@ UFileMput::UFileMput()
 
 UFileMput::~UFileMput() {
 
-  if (m_file_stream && m_file_stream->is_open())
-    m_file_stream->close();
+  if (m_file_stream) {
+    if (m_file_stream->is_open()) {
+      m_file_stream->close();
+    }
+    delete m_file_stream;
+  }
 }
 
 void UFileMput::SetResource(const std::string &bucket, const std::string &key) {
@@ -144,6 +148,12 @@ int UFileMput::MUpload(ssize_t blk_idx) {
   if (ret)
     return ret;
 
+  if (!m_is) {
+     UFILE_SET_ERROR2(ERR_CPPSDK_INVALID_PARAM,
+        "stream has not been set up yet");
+     return ERR_CPPSDK_INVALID_PARAM;
+  }
+
   if (blk_idx != -1)
     m_blk_idx = blk_idx;
 
@@ -222,6 +232,85 @@ int UFileMput::MUpload(ssize_t blk_idx) {
       return ret;
     }
     m_uploaded_size += bsize;
+  }
+  return ret;
+}
+
+int UFileMput::MUpload(ssize_t blk_idx, const char *data, size_t len) {
+  int64_t ret = InitGlobalConfig();
+  if (ret)
+    return ret;
+
+  m_blk_idx = blk_idx;
+
+  if (m_mimetype == "") {
+    ret = MimeType(m_filename, m_mimetype);
+    if (ret)
+      return ret;
+  }
+
+  UCloudStreamBuf sbuf(data, len);
+  std::istream iss(&sbuf);
+  if (!iss) {
+    UFILE_SET_ERROR(ERR_CPPSDK_FILE_READ);
+    return ERR_CPPSDK_FILE_READ;
+  }
+
+  //开始上传数据
+  std::string signature("");
+  //构建 HTTP 头部
+  m_http->Reset();
+  m_http->SetVerb("PUT");
+  m_http->AddHeader("Content-Type", m_mimetype);
+  m_http->AddHeader("Content-Length", SIZET2STR(len));
+  m_http->AddHeader("User-Agent", USERAGENT);
+  m_http->SetURL(MUploadURL());
+
+  //使用 HTTP 信息构建签名
+  UFileDigest digestor;
+  ret = digestor.SignWithRequest(m_http, HEAD_FIELD_CHECK, m_bucket, m_key, "",
+                                 signature);
+  if (ret) {
+    return ret;
+  }
+  m_http->AddHeader("Authorization", digestor.Token(signature));
+
+  //设置输出
+  std::ostringstream oss, hss;
+  UCloudOStream data_stream(&oss);
+  UCloudOStream header_stream(&hss);
+  UCloudHTTPReadParam rp =
+      {f : NULL, is : iss, fsize : len, need_total_n : len};
+  UCloudHTTPWriteParam wp = {f : NULL, os : &data_stream};
+  UCloudHTTPHeaderParam hp = {f : NULL, os : &header_stream};
+  ret = m_http->RoundTrip(&rp, &wp, &hp);
+  if (ret) {
+    UFILE_SET_ERROR2(ERR_CPPSDK_SEND_HTTP, UFILE_LAST_ERRMSG());
+    return ERR_CPPSDK_SEND_HTTP;
+  }
+
+  //解析回应
+  long code = 200;
+  ret = m_http->ResponseCode(&code);
+  if (ret) {
+    UFILE_SET_ERROR(ERR_CPPSDK_CURL);
+    return ERR_CPPSDK_CURL;
+  }
+
+  std::string errmsg;
+  if (code != 200) {
+    int parse_ret = UFileErrorRsp(oss.str().c_str(), &ret, errmsg);
+    if (parse_ret) {
+      UFILE_SET_ERROR(ERR_CPPSDK_CLIENT_INTERNAL);
+      return ERR_CPPSDK_CLIENT_INTERNAL;
+    }
+    UFILE_SET_ERROR2(ret, errmsg);
+  } else {
+    ret = ParseMuploadResult(oss.str(), hss.str());
+    if (ret) {
+      return ret;
+    }
+    m_uploaded_size += len;
   }
   return ret;
 }
